@@ -1,13 +1,14 @@
 import axios from 'axios';
+import BaseApi from './baseApi';
 
-class PropertyApi  {
-
+class PropertyApi extends BaseApi {
     constructor(){
+        super();
         this.baseUrl = 'https://properly-api-production.herokuapp.com/api/wolfnet/';
     }
-
-    getAll(){
-        return axios.get(this.baseUrl + 'properties/');
+    getAll(params = {}){
+        const query = this.buildUrlParams(params);
+        return axios.get(this.baseUrl + 'properties/?' + query);
     }
     getAttributes(id){
         return axios.get(this.baseUrl + 'properties/' + id + '/property-attribute');

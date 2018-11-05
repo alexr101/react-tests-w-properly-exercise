@@ -1,40 +1,86 @@
 import React, {Component} from 'react';
+import {connect} from 'react-redux';
 import PropertyCard from './propertyCard/PropertyCard';
 import PropertyApi from '../../../api/property';
 import {Row, Col} from 'react-bootstrap';
+import {updateProperties, updateProperty} from '../../../store/actions/property';
+
 
 import './PropertyCardCollection.css';
 
-class PropertyCardCollection extends Component {
+const mapDispatchToProps = dispatch => {
+    return {
+        updateProperties: (properties) => {
+            dispatch( updateProperties(properties) ) 
+        },
+        updateProperty: (property) => {
+            dispatch( updateProperty(property) ) 
+        },
+    }
+}
 
-    constructor(){
-        super();
+const mapStateToProps = state => {
+    return { 
+        properties: state.property.properties,
+        propertyApiParams: state.property.apiParams,
+    };
+}
+
+class ConnectedPropertyCardCollection extends Component {
+
+    constructor(props){
+        super(props);
         this.getProperties();
         this.getProperties = this.getProperties.bind(this);
     }
 
     getProperties(){
+        console.log('gte properties');
+        
         PropertyApi.getAll()
             .then((res)=>{
                 const properties = res.data.data;
-                this.properties = properties;
-                this.getIndividualPropertyData();
-                this.forceUpdate()
+                
+                
+                // this.props.updateProperties(properties);
             })
-            .catch((err)=>{
-                console.log(err);
+            .catch((err)=> { 
+                console.log(err) 
             });
     }
 
+    componentDidUpdate(prevProps) {
+        let key1 = '';
+        let key2 = '';
+        prevProps.properties.map((p)=> key1 += p.id);
+        this.props.properties.map((p)=> key2 += p.id);
+        const newProperties = !prevProps.properties.length;
+        const propertyOrderChanged = key1 !== key2;
+
+        if(newProperties || propertyOrderChanged) {
+            console.log('get ind');
+            
+            this.getIndividualPropertyData();
+        }
+
+        const apiParamsChanged = JSON.stringify(prevProps.propertyApiParams) === JSON.stringify(this.props.propertyApiParams); // this comparison is not 100% acurrate
+        if(apiParamsChanged) {
+            this.getProperties();
+        }
+    }
+
     getIndividualPropertyData() {
-        this.properties.map(async (property)=>{
+        
+        this.props.properties.map(async (property, i)=>{
             const id = property.id;
             const photosPromise = this.getPhotos(id);
             const attributePromise = this.getAttributes(id);
             const [photos, attributes] = await Promise.all([photosPromise, attributePromise]);
             property.photos = photos;
             property.extraAttributes = attributes;
-            this.forceUpdate()
+            property.index = i;
+            
+            this.props.updateProperty(property);
         })
     }
 
@@ -46,7 +92,10 @@ class PropertyCardCollection extends Component {
     }
 
     renderProperties(){
-        return this.properties.map((property)=> {
+        console.log('renderprops');
+        console.log(this.props);
+        
+        return this.props.properties.map((property)=> {
             let img = '';
             let details = '';
 
@@ -70,8 +119,6 @@ class PropertyCardCollection extends Component {
     }
 
     render(){
-        if(!this.properties) this.properties = [];
-        
         return (
             <div>
                 <Row>
@@ -82,4 +129,5 @@ class PropertyCardCollection extends Component {
     }
 }
 
+const PropertyCardCollection = connect(mapStateToProps, mapDispatchToProps)(ConnectedPropertyCardCollection);
 export default PropertyCardCollection;
