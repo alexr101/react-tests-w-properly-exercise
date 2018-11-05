@@ -4,11 +4,13 @@
   "private": true,
   "proxy": "http://localhost:8080/",
   "dependencies": {
+    "axios": "^0.18.0",
     "react": "^16.6.0",
     "react-bootstrap": "^0.32.4",
     "react-dom": "^16.6.0",
     "react-redux": "^5.1.0",
     "react-scripts": "2.0.5",
+    "react-text-truncate": "^0.13.1",
     "redux": "^4.0.1"
   },
   "scripts": {

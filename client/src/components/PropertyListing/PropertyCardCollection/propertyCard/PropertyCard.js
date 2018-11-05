@@ -1,4 +1,6 @@
 import React, {Component} from 'react';
+import TextTruncate from 'react-text-truncate'; // recommend
+
 import './PropertyCard.css';
 
 class PropertyCard extends Component {
@@ -7,13 +9,17 @@ class PropertyCard extends Component {
             <div className="propertyCard">
                 <div className="imageContainer">
                     <img className="leftArrow" src=""></img>
-                    <img className="propertyImg" src=""></img>
+                    <img className="propertyImg" src={this.props.img}></img>
                     <img className="rightArrow" src=""></img>
                 </div>
                 <div class="propertyInfo">
                     <strong>Address:{this.props.address}</strong>
                     <p>Price {this.props.price}</p>
-                    <p>Details {this.props.details}</p>
+                    <TextTruncate
+                        line={3}
+                        truncateText="…"
+                        text={'Details: ' + this.props.details}
+                    />
                 </div>
             </div>
         )
