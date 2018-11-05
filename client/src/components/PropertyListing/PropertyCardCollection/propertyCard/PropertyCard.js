@@ -6,9 +6,9 @@ class PropertyCard extends Component {
         return (
             <div className="propertyCard">
                 <div className="imageContainer">
-                    <image className="leftArrow" src=""></image>
-                    <image className="propertyImg" src=""></image>
-                    <image className="rightArrow" src=""></image>
+                    <img className="leftArrow" src=""></img>
+                    <img className="propertyImg" src=""></img>
+                    <img className="rightArrow" src=""></img>
                 </div>
                 <div class="propertyInfo">
                     <strong>Address:{this.props.address}</strong>

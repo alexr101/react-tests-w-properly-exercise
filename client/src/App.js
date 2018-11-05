@@ -3,28 +3,17 @@ import logo from './logo.svg';
 import './App.css';
 import Component1 from './components/component1/component1';
 import PropertyListing from './components/PropertyListing/PropertyListing';
+import {Grid, Row, Col} from 'react-bootstrap';
 
 class App extends Component {
   render() {
     return (
       <div className="App">
-        <Component1></Component1>
-        <PropertyListing></PropertyListing>
-
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
+        <Row>
+          <Col sm={12} md={6}>
+            <PropertyListing></PropertyListing>
+          </Col>
+        </Row>
       </div>
     );
   }
