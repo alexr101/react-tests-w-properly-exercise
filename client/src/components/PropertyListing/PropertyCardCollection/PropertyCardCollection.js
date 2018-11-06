@@ -4,8 +4,6 @@ import PropertyCard from './propertyCard/PropertyCard';
 import PropertyApi from '../../../api/property';
 import {Row, Col} from 'react-bootstrap';
 import {updateProperties, updateProperty} from '../../../store/actions/property';
-
-
 import './PropertyCardCollection.css';
 
 const mapDispatchToProps = dispatch => {
@@ -52,19 +50,12 @@ class ConnectedPropertyCardCollection extends Component {
         const propertyOrderChanged = key1 !== key2;
 
         if(newProperties || propertyOrderChanged) {
-            console.log('getindividual');
-            
             this.getIndividualPropertyData();
         }
 
         const apiParamsChanged = JSON.stringify(prevProps.propertyApiParams) !== JSON.stringify(this.props.propertyApiParams); // this comparison is not 100% acurrate
-        console.log(prevProps.propertyApiParams);
-        console.log(this.props.propertyApiParams);
-        
         
         if(apiParamsChanged) {
-            console.log('getproperties');
-            
             this.getProperties();
         }
     }
@@ -92,9 +83,6 @@ class ConnectedPropertyCardCollection extends Component {
     }
 
     renderProperties(){
-        console.log('renderprops');
-        console.log(this.props);
-        
         return this.props.properties.map((property)=> {
             let img = '';
             let details = '';

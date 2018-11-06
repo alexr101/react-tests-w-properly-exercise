@@ -6,8 +6,6 @@ const initialState = {
 }
 
 export default function counter(state = initialState, action) {
-    console.log(action);
-    
     switch (action.type) {
         case UPDATE_API_PARAMS:
             let newState = {
