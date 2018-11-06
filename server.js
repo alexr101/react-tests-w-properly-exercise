@@ -6,7 +6,7 @@ const port = process.env.PORT || 8080;
 const ngrok = require('ngrok');
 (async function() {
   const url = await ngrok.connect(port);
-  console.log('ngrok connected on ', url);
+  console.log('ngrok connected on \n', url);
 })();
 
 // Serve any static files

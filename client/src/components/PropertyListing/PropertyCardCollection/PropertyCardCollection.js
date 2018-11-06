@@ -35,18 +35,12 @@ class ConnectedPropertyCardCollection extends Component {
     }
 
     getProperties(){
-        console.log('gte properties');
-        
-        PropertyApi.getAll()
+        PropertyApi.getAll(this.props.propertyApiParams)
             .then((res)=>{
                 const properties = res.data.data;
-                
-                
-                // this.props.updateProperties(properties);
+                this.props.updateProperties(properties);
             })
-            .catch((err)=> { 
-                console.log(err) 
-            });
+            .catch((err)=> console.log(err) );
     }
 
     componentDidUpdate(prevProps) {
@@ -58,13 +52,19 @@ class ConnectedPropertyCardCollection extends Component {
         const propertyOrderChanged = key1 !== key2;
 
         if(newProperties || propertyOrderChanged) {
-            console.log('get ind');
+            console.log('getindividual');
             
             this.getIndividualPropertyData();
         }
 
-        const apiParamsChanged = JSON.stringify(prevProps.propertyApiParams) === JSON.stringify(this.props.propertyApiParams); // this comparison is not 100% acurrate
+        const apiParamsChanged = JSON.stringify(prevProps.propertyApiParams) !== JSON.stringify(this.props.propertyApiParams); // this comparison is not 100% acurrate
+        console.log(prevProps.propertyApiParams);
+        console.log(this.props.propertyApiParams);
+        
+        
         if(apiParamsChanged) {
+            console.log('getproperties');
+            
             this.getProperties();
         }
     }

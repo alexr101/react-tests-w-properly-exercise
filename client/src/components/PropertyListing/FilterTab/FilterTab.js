@@ -7,8 +7,8 @@ import './FilterTab.css';
 
 const mapDispatchToProps = dispatch => {
     return {
-        updateApiParams: (params) => {
-            dispatch( updateApiParams(params) ) 
+        updateApiParams: (newParam) => {
+            dispatch( updateApiParams(newParam) ) 
         }
     }
 }
@@ -21,14 +21,12 @@ const mapStateToProps = state => {
 
 class ConnectedFilterTab extends Component {
 
-    constructor(){
-        super();
-        this.propertyApiParams = {}
-    }
-
     updatePropertyParams(type, e){
-        this.props.propertyApiParams[type] = e.target.value;
-        this.props.updateApiParams(this.props.propertyApiParams)
+        let newParam = {
+            key: type,
+            value: e.target.value
+        }
+        this.props.updateApiParams(newParam)
     }
 
     render(){

@@ -6,28 +6,21 @@ const initialState = {
 }
 
 export default function counter(state = initialState, action) {
-    let newState = { ...state };
-
+    console.log(action);
+    
     switch (action.type) {
         case UPDATE_API_PARAMS:
-            return {...state, apiParams: action.payload};
+            let newState = {
+                ...state, 
+                apiParams: { 
+                    ...state.apiParams 
+                }
+            }
+            newState.apiParams[action.payload.key] = action.payload.value
+            return newState;
         case UPDATE_PROPERTIES:
-            console.log('update properies');
-            console.log({...state, properties: action.payload});
-            
-            
             return {...state, properties: action.payload};
         case UPDATE_PROPERTY:
-        console.log({
-            ...state,
-            properties: state.properties.map(property => property.id === action.id ?
-                // transform the one with a matching id
-                action.payload : 
-                // otherwise return original todo
-                property
-            ) 
-        });
-        
             return {
                 ...state,
                 properties: state.properties.map(property => property.id === action.id ?
