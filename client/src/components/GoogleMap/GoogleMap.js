@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import {connect} from 'react-redux';
+import {propOrderChanged, getPropertyAddress} from '../helpers';
 import GoogleMapReact from 'google-map-react';
+import './GoogleMap.css';
  
 const mapStateToProps = state => {
     return { 
@@ -11,86 +13,126 @@ const mapStateToProps = state => {
 const AnyReactComponent = ({ text }) => <div>{text}</div>;
  
 class ConnectedSimpleMap extends Component {
-  static defaultProps = {
-    center: {
-      lat: 59.95,
-      lng: 30.33
-    },
-    zoom: 11
-  };
+    static defaultProps = {
+        center: {
+        lat: 59.95,
+        lng: 30.33
+        },
+        zoom: 11
+    };
 
-  renderMarkers(map, maps, address) {
-    const geocoder = new window.google.maps.Geocoder();
-    const bounds = new window.google.maps.LatLngBounds();
-
-    geocoder.geocode({'address': address}, function(results, status) {
-        if (status === 'OK') {
-            map.setCenter(results[0].geometry.location);
-            const marker = new window.google.maps.Marker({
-                map: map,
-                position: results[0].geometry.location
-            });
-            bounds.extend(marker.position);
-        } else {
-            alert('Geocode was not successful for the following reason: ' + status);
+    constructor(props){
+        super(props);
+        this.state = {
+            map: {},
+            maps: {},
+            bounds: {},
+            markers: [],
+            infoWindows: []
         }
-    });
-    map.fitBounds(bounds);
+        this.renderPropertyMarker.bind(this)
+        this.updateBounds.bind(this)
+        this.clearMarkers.bind(this)
+        this.setMaps.bind(this)
+        this.resetMapConfig.bind(this)
+        this.loadPropertiesOnMap.bind(this)
+    }
+    renderPropertyMarker(property) {
+        const _this = this;
+        const geocoder = new window.google.maps.Geocoder();
+        const address = getPropertyAddress(property);
+        
+        geocoder.geocode({'address': address}, function(results, status) {
+            if (status === 'OK') {
+                const marker = new window.google.maps.Marker({
+                    map: _this.state.map,
+                    position: results[0].geometry.location
+                });
 
-  }
+                const infowindow = new window.google.maps.InfoWindow({
+                    content: property.extraAttributes.data.data.attributes.remarks 
+                });
 
-  componentDidUpdate(prevProps) {
-        let key1 = '';
-        let key2 = '';
-        prevProps.properties.map((p)=> key1 += p.id);
-        this.props.properties.map((p)=> key2 += p.id);
-        const newProperties = !prevProps.properties.length;
-        const propertyOrderChanged = key1 !== key2;
+                marker.addListener('click', function() {
+                    _this.closeInfoWindows();
+                    infowindow.open(_this.state.map, marker);
+                });
 
-        if(newProperties || propertyOrderChanged) {
+                _this.state.bounds.extend(marker.position);
+                _this.state.markers.push(marker);
+                _this.state.infoWindows.push(infowindow);
+                _this.updateBounds();
+            } else {
+                alert('Geocode was not successful for the following reason: ' + status);
+            }
+        });
+    }
+
+    updateBounds(){
+        this.state.map.fitBounds(this.state.bounds);
+    }
+    
+    componentDidUpdate(prevProps) {
+        const propertiesListed = 10; // hard coded here...just use a state val later
+        // bulky but given the api call order atm it needs to do all these checks so we dont run into an infinite loop
+        const propertiesReady = prevProps.properties.length 
+            && 'extraAttributes' in this.props.properties[propertiesListed-1]
+            && !('extraAttributes' in prevProps.properties[propertiesListed-1])
+        const propertyOrderChanged = propOrderChanged(prevProps, this.props);
+
+        // bug here. propertyOrderChanged triggers a loop when changing a filter
+        if( propertiesReady || (propertiesReady && propertyOrderChanged)) {
             this.loadPropertiesOnMap();
         }
-
+    }
+    closeInfoWindows(){
+        while(this.state.infoWindows.length) {
+            this.state.infoWindows.close();
+        }
+    }
+    clearMarkers(){
+        while(this.state.markers.length) {
+            this.state.markers.pop().setMap(null);
+        }
     }
 
     setMaps(map, maps){
-        this.map = map;
-        this.maps = maps;
+        this.setState({
+            map: map,
+            maps: maps
+        })
     }
 
-    loadPropertiesOnMap(map, maps) {
- 
-        this.props.properties.map((property)=>{
-            const streetAddress = property.attributes['display-address'] 
-            const city = property.attributes.city;
-            const state = property.attributes.state;
+    resetMapConfig(){
+        this.clearMarkers();
+        this.setState({
+            bounds: new window.google.maps.LatLngBounds()
+        })
+    }
 
-            const fullAddress = streetAddress + ', ' + city + ', ' + state;
-            this.renderMarkers(this.map, this.maps, fullAddress);
-            console.log(property);
+    loadPropertiesOnMap() {
+        console.log('reset map config');
+        
+        this.resetMapConfig();
+        this.props.properties.map((property)=>{
+            this.renderPropertyMarker(property);
         })
     }
  
     render() {
         return (
         // Important! Always set the container height explicitly
-        <div style={{ height: '100vh', width: '100%' }}>
+        <div className="googleMap">
             <GoogleMapReact
-            bootstrapURLKeys={{ key: 'AIzaSyAizpPScCL2XazFKeIYHCRJIZtrIX7i8BI' }}
-            defaultCenter={this.props.center}
-            defaultZoom={this.props.zoom}
-            onGoogleApiLoaded={({map, maps}) => this.setMaps(map, maps)}
-            >
-            <AnyReactComponent
-                lat={59.955413}
-                lng={30.337844}
-                text={'Kreyser Avrora'}
-            />
-            
+                bootstrapURLKeys={{ key: 'AIzaSyAizpPScCL2XazFKeIYHCRJIZtrIX7i8BI' }}
+                defaultCenter={this.props.center}
+                defaultZoom={this.props.zoom}
+                onGoogleApiLoaded={({map, maps}) => this.setMaps(map, maps)}
+                >
             </GoogleMapReact>
         </div>
         );
-  }
+    }
 }
 const SimpleMap = connect(mapStateToProps)(ConnectedSimpleMap);
 export default SimpleMap;

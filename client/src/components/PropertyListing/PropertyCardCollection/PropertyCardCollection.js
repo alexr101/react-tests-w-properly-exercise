@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
+import {propOrderChanged} from '../../helpers';
 import PropertyCard from './propertyCard/PropertyCard';
 import PropertyApi from '../../../api/property';
 import {Row, Col} from 'react-bootstrap';
@@ -42,36 +43,37 @@ class ConnectedPropertyCardCollection extends Component {
     }
 
     componentDidUpdate(prevProps) {
-        let key1 = '';
-        let key2 = '';
-        prevProps.properties.map((p)=> key1 += p.id);
-        this.props.properties.map((p)=> key2 += p.id);
         const newProperties = !prevProps.properties.length;
-        const propertyOrderChanged = key1 !== key2;
+        const gotProperties = this.props.properties.length;
+        const propertyOrderChanged = propOrderChanged(prevProps, this.props);
 
-        if(newProperties || propertyOrderChanged) {
+        if(newProperties && gotProperties || propertyOrderChanged) {
+            console.log('get ind prop data')
             this.getIndividualPropertyData();
         }
 
         const apiParamsChanged = JSON.stringify(prevProps.propertyApiParams) !== JSON.stringify(this.props.propertyApiParams); // this comparison is not 100% acurrate
         
         if(apiParamsChanged) {
+            console.log('api params changed');
+            
             this.getProperties();
         }
     }
 
     getIndividualPropertyData() {
-        
         this.props.properties.map(async (property, i)=>{
             const id = property.id;
             const photosPromise = this.getPhotos(id);
             const attributePromise = this.getAttributes(id);
             const [photos, attributes] = await Promise.all([photosPromise, attributePromise]);
-            property.photos = photos;
-            property.extraAttributes = attributes;
-            property.index = i;
+            let newProperty = {
+                ...property
+            }
+            newProperty.photos = photos;
+            newProperty.extraAttributes = attributes;
             
-            this.props.updateProperty(property);
+            this.props.updateProperty(newProperty);
         })
     }
 

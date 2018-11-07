@@ -7,7 +7,6 @@ class PropertyListing extends Component {
     render(){
         return (
             <div className="propertyListing">
-                <FilterTab></FilterTab>
                 <PropertyCardCollection></PropertyCardCollection>
             </div>
         )

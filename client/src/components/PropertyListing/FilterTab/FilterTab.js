@@ -31,9 +31,9 @@ class ConnectedFilterTab extends Component {
 
     render(){
         return (
-            <Form>
+            <Form className="FilterTab">
                 <Row>
-                    <Col sm={12} md={4} lg={2}>
+                    <Col xs={12} sm={3} md={2} lg={2}>
                         <FormGroup controlId="formControlsSelect">
                             <ControlLabel>Price</ControlLabel>
                             <FormControl componentClass="select" placeholder="select" onChange={(e)=>this.updatePropertyParams('price', e)}>
@@ -44,7 +44,7 @@ class ConnectedFilterTab extends Component {
                             </FormControl>
                         </FormGroup>
                     </Col>
-                    <Col sm={12} md={4} lg={2}>
+                    <Col xs={12} sm={2} md={2} lg={1}>
                         <FormGroup controlId="formControlsSelect">
                             <ControlLabel>Bed</ControlLabel>
                             <FormControl componentClass="select" placeholder="select" onChange={(e)=>this.updatePropertyParams('bed', e)}>
@@ -55,7 +55,7 @@ class ConnectedFilterTab extends Component {
                             </FormControl>
                         </FormGroup>
                     </Col>
-                    <Col sm={12} md={4} lg={2}>
+                    <Col xs={12} sm={2} md={2} lg={1}>
                         <FormGroup controlId="formControlsSelect">
                             <ControlLabel>Bath</ControlLabel>
                             <FormControl componentClass="select" placeholder="select" onChange={(e)=>this.updatePropertyParams('bath', e)}>
@@ -66,7 +66,7 @@ class ConnectedFilterTab extends Component {
                             </FormControl>
                         </FormGroup>
                     </Col>
-                    <Col sm={12} md={4} lg={2} className="pull-right">
+                    <Col xs={12} sm={3} md={2} lg={2}>
                         <FormGroup controlId="formControlsSelect">
                             <ControlLabel>Sort</ControlLabel>
                             <FormControl componentClass="select" placeholder="select" onChange={(e)=>this.updatePropertyParams('sort', e)}>

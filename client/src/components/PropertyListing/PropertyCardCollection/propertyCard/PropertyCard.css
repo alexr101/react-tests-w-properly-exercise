@@ -4,14 +4,15 @@
     width: 100%;
     border: 1px solid #e4e4e4;
     min-height: 350px;
-    padding: 15px;
+    padding: 0px;
 }
 
 .propertyCard img {
-    width: 250px;
+    width: 100%;
     border: 1px solid #e4e4e4;
 }
 
 .propertyInfo {
+    padding: 15px;
     margin-top: auto;
 }
