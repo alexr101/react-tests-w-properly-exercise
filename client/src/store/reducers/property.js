@@ -20,10 +20,6 @@ export default function counter(state = initialState, action) {
         
             return {...state, properties: action.payload};
         case UPDATE_PROPERTY:
-        console.log();
-        
-            console.log(state);
-            
             return {
                 ...state,
                 properties: state.properties.map(property => {
@@ -34,7 +30,7 @@ export default function counter(state = initialState, action) {
                       ...property,
                       ...action.payload
                     }
-                  })
+                })
             }
         default:
             return state

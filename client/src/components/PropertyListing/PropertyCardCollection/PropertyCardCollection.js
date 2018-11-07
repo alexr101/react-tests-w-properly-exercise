@@ -47,8 +47,7 @@ class ConnectedPropertyCardCollection extends Component {
         const gotProperties = this.props.properties.length;
         const propertyOrderChanged = propOrderChanged(prevProps, this.props);
 
-        if(newProperties && gotProperties || propertyOrderChanged) {
-            console.log('get ind prop data')
+        if((newProperties && gotProperties) || propertyOrderChanged) {
             this.getIndividualPropertyData();
         }
 
@@ -95,10 +94,9 @@ class ConnectedPropertyCardCollection extends Component {
                 details = property.extraAttributes.data.data.attributes.remarks;
 
             return (
-                <Col sm={12} md={12} lg={6}>
+                <Col sm={12} md={12} lg={6} key={property.id}>
                     <PropertyCard 
                         img={img}
-                        key={property.id}
                         address={property.attributes['display-address']}
                         price={property.attributes['listing-price']}
                         details={details}

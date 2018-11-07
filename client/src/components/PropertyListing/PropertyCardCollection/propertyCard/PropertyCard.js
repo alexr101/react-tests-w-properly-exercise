@@ -8,9 +8,9 @@ class PropertyCard extends Component {
         return (
             <div className="propertyCard">
                 <div className="imageContainer">
-                    <img className="propertyImg" src={this.props.img}></img>
+                    <img className="propertyImg" src={this.props.img} alt="property"></img>
                 </div>
-                <div class="propertyInfo">
+                <div className="propertyInfo">
                     <strong>Address:{this.props.address}</strong>
                     <p>Price {this.props.price}</p>
                     <TextTruncate

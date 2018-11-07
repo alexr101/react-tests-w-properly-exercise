@@ -10,8 +10,6 @@ const mapStateToProps = state => {
     };
 }
 
-const AnyReactComponent = ({ text }) => <div>{text}</div>;
- 
 class ConnectedSimpleMap extends Component {
     static defaultProps = {
         center: {
@@ -87,7 +85,7 @@ class ConnectedSimpleMap extends Component {
     }
     closeInfoWindows(){
         while(this.state.infoWindows.length) {
-            this.state.infoWindows.close();
+            this.state.infoWindows.pop().close();
         }
     }
     clearMarkers(){
@@ -111,12 +109,8 @@ class ConnectedSimpleMap extends Component {
     }
 
     loadPropertiesOnMap() {
-        console.log('reset map config');
-        
         this.resetMapConfig();
-        this.props.properties.map((property)=>{
-            this.renderPropertyMarker(property);
-        })
+        this.props.properties.map((property)=>this.renderPropertyMarker(property))
     }
  
     render() {
