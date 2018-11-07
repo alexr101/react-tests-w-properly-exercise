@@ -1,11 +1,19 @@
 import React, { Component } from 'react';
 import './App.css';
+import {connect} from 'react-redux';
 import PropertyListing from './components/PropertyListing/PropertyListing';
 import FilterTab from './components/PropertyListing/FilterTab/FilterTab';
 import GoogleMap from './components/GoogleMap/GoogleMap';
 import {Row, Col} from 'react-bootstrap';
 
-class App extends Component {
+const mapStateToProps = state => {
+  return { 
+      properties: state.property.properties,
+      propertyApiParams: state.property.apiParams,
+  };
+}
+
+class ConnectedApp extends Component {
   render() {
     return (
       <div className="App">
@@ -20,7 +28,7 @@ class App extends Component {
           <Col sm={12} md={6}>
             <div className="PropertiesHeader">
               <h1 className="AppTitle">View Homes</h1>
-              <span>10 resuls found</span>
+              <span>{this.props.properties.length} resuls found</span>
             </div>
             
             <PropertyListing></PropertyListing>
@@ -34,4 +42,5 @@ class App extends Component {
   }
 }
 
+const App = connect(mapStateToProps)(ConnectedApp);
 export default App;
