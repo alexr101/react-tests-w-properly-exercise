@@ -9,8 +9,10 @@ class PropertyApi extends BaseApi {
     }
 
     getAll(params = {}){
-        console.log(params);
         const query = this.buildUrlParams(params);
+        console.log(query);
+        console.log(params);
+
         return axios.get(this.baseUrl + 'properties/?' + query);
     }
     getAttributes(id){

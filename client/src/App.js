@@ -19,7 +19,7 @@ class ConnectedApp extends Component {
       <div className="App">
 
         <div className="Controls">
-          <nav>properly code exercise</nav>
+          <nav>RealEstate API - REACT/REDUX</nav>
           <FilterTab></FilterTab>
         </div>
         <div className="ControlsPlaceholder"></div>

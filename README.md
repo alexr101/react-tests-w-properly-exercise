@@ -1,17 +1,15 @@
-# Properly Code Exercise 
+# Real Estate Finder App REACT-REDUX
 
-App can be run from Node server in case of CORS issues.
-1. npm run build-client
+The app can be run from the client folder.
+
+1. npm build
 2. npm i
 3. npm start
-4. Might need to download a CORS plugin from Chrome and activate it
+4. Download and enable CORS extension. See below
 
-Otherwise this can be run from the client folder.
+## Download CORS extention
+Download and enable https://chrome.google.com/webstore/detail/allow-control-allow-origi/nlfbmbojpeacfghkpbjhddihlkkiljbi?hl=en
+The API doesn't allow cross-origin requests.
 
-1. npm i
-2. npm start
-
-App was created in React, and it's mostly component based. 
-
-To separate state logic state management is done with Redux. The store, actions and reducers can be found inside the "store" folder.
-
+## A note on filtering properties
+API params are not supported by the server, but they are sent by React nevertheless. See the dev console when you change the filters. It will show the new API url & js object from Redux containint the filter state.

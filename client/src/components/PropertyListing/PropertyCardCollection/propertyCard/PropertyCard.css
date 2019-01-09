@@ -10,9 +10,11 @@
 .propertyCard img {
     width: 100%;
     border: 1px solid #e4e4e4;
+    max-height: 282px;
 }
 
 .propertyInfo {
     padding: 15px;
     margin-top: auto;
+    min-height: 140px;
 }

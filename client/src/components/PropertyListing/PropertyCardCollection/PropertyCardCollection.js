@@ -90,6 +90,8 @@ class ConnectedPropertyCardCollection extends Component {
 
             if(property.photos && property.photos.data.data.length) 
                 img = property.photos.data.data[0].attributes['photo-url'];
+            else 
+                img = '/images/placeholder.jpg'
             if(property.extraAttributes) 
                 details = property.extraAttributes.data.data.attributes.remarks;
 
